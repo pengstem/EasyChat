@@ -13,7 +13,7 @@ A Python-based application for interacting with Google's Gemini AI models throug
 ## 📋 Requirements
 
 - Python 3.10+
-- Google API key (obtainable from https://aistudio.google.com/apikey)
+- Google API key (obtainable from <https://aistudio.google.com/apikey>)
 - Internet connection
 
 ## 🛠️ Installation
