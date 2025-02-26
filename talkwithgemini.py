@@ -1,5 +1,4 @@
 from websockets.legacy.client import WebSocketClientProtocol
-from websockets_proxy import Proxy, proxy_connect
 import asyncio
 import base64
 import json
@@ -10,7 +9,6 @@ from rich.console import Console
 from rich.markdown import Markdown
 from websockets.asyncio.client import connect
 from websockets.asyncio.connection import Connection
-from elevenlabs import ElevenLabs, play
 import dotenv
 
 dotenv.load_dotenv()
@@ -19,24 +17,25 @@ dotenv.load_dotenv()
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 SEND_SAMPLE_RATE = 16000
-RECEIVE_SAMPLE_RATE = 16000
 CHUNK_SIZE = 512
 
 host = "generativelanguage.googleapis.com"
 model = "gemini-2.0-flash-exp"
-api_key = os.environ["GOOGLE_API_KEY"]
-uri = f"wss://{host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key={api_key}"
 
 # 语音设置
 pya = pyaudio.PyAudio()
 
 class VoiceChat:
-    def __init__(self):
+    def __init__(self, api_key=None):
         self.ws: WebSocketClientProtocol | Connection
         self.audio_out_queue = asyncio.Queue()
         self.running_step = 0
         self.paused = False
         self.console = Console()
+        # Use provided API key or fall back to environment variable
+        self.api_key = api_key if api_key else os.environ.get("GOOGLE_API_KEY")
+        if not self.api_key:
+            raise ValueError("API key is required. Please provide it or set GOOGLE_API_KEY environment variable.")
         
 
     async def startup(self):
@@ -59,12 +58,7 @@ class VoiceChat:
                         "role": "user",
                         "parts": [
                             {
-                                "text": "你是一个智能助手，我们将通过语音进行交流。请简洁清晰地回答我的问题，或者帮我完成我要求的任务。\
-\
-                                        请理解我的语音输入可能会有一些错误或不完整，尽量理解我的意图。\
-\
-                                        如果你明白了，请回复'i am ready ,go ahead'\
-"
+                                "text": "let's talk!",
                             }
                         ],
                     }
@@ -90,7 +84,7 @@ class VoiceChat:
                 turn_complete = response["serverContent"]["turnComplete"]
                 if turn_complete:
                     if current_response:
-                        self.console.print("initiate successfully ✅", style="green")
+                        self.console.print("Connection established ✅", style="green")
                         text = "".join(current_response)
                         self.console.print(Markdown(text))
                         return
@@ -109,7 +103,7 @@ class VoiceChat:
             frames_per_buffer=CHUNK_SIZE,
         )
 
-        self.console.print("🎤 feel free to speak", style="yellow")
+        self.console.print("🎤 I'm listening, feel free to speak", style="yellow")
 
         while True:
             if self.paused:
@@ -159,7 +153,6 @@ class VoiceChat:
         current_response = []
         async for raw_response in self.ws:
             if self.running_step == 1:
-                self.console.print("\n♻️ processing:", end="")
                 self.running_step += 1
 
             response = json.loads(raw_response)
@@ -181,13 +174,13 @@ class VoiceChat:
                     # 检查是否是控制命令
                     if "暂停对话" in text.lower():
                         self.paused = True
-                        self.console.print("\n⏸ 会话已暂停。说 '继续对话' 继续", style="yellow")
+                        self.console.print("\n⏸ Conversation paused. Say 'Continue conversation' to resume", style="yellow")
                     elif "继续对话" in text.lower() and self.paused:
                         self.paused = False
-                        self.console.print("\n🎵 会话继续", style="green")
+                        self.console.print("\n🎵 Conversation resumed", style="green")
                     
                     # 显示响应
-                    self.console.print("\n🤖 =============================================", style="yellow")
+                    self.console.print("\n=============================================", style="yellow")
                     self.console.print(Markdown(text))
 
                     current_response = []
@@ -196,10 +189,11 @@ class VoiceChat:
                 pass
 
     async def run(self):
+        uri = f"wss://{host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key={self.api_key}"
         
-        async with (proxy_connect(uri, proxy=proxy) if proxy else connect(uri)) as ws:
+        async with connect(uri) as ws:
             self.ws = ws
-            self.console.print("通用语音对话系统", style="green", highlight=True)
+            self.console.print("Gemini Voice Chat", style="green", highlight=True)
             self.console.print("============================================", style="yellow")
             
             await self.startup()
