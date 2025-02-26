@@ -52,6 +52,29 @@ python gemini.py
 3. Use your microphone to practice English speaking
 4. Receive pronunciation feedback and corrections
 
+## 📱 Model Options
+
+- **gemini-2.0-flash**: Fast, efficient model suitable for everyday conversations
+- **gemini-2.0-pro-exp**: Advanced model with expanded capabilities for complex tasks
+- **gemini-2.0-flash-thinking**: Specialized model with "thinking out loud" capabilities
+
+## ❓ Troubleshooting
+
+- **API Key Issues**: Ensure your Google API key is valid and has access to Gemini models
+- **Audio Problems**: Check your microphone settings and permissions
+- **Connection Issues**: Verify your internet connection and proxy settings if applicable
+- **Package Errors**: Make sure all dependencies are correctly installed with the right versions
+
+## 🤝 Contributing
+
+Contributions are welcome! If you'd like to improve EasyChat:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b new-feature`
+3. Commit your changes: `git commit -am 'Add new feature'`
+4. Push to the branch: `git push origin new-feature`
+5. Submit a pull request
+
 ## 🎯 Purpose
 
 EasyChat is designed for those who want to use free AI models for:
@@ -62,4 +85,4 @@ EasyChat is designed for those who want to use free AI models for:
 
 ## 📝 License
 
-This project is available for personal use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
