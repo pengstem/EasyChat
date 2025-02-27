@@ -2,19 +2,11 @@ from websockets.legacy.client import WebSocketClientProtocol
 import asyncio
 import base64
 import json
-import os
-import sys
 import pyaudio
 from rich.console import Console
 from rich.markdown import Markdown
 from websockets.asyncio.client import connect
 from websockets.asyncio.connection import Connection
-
-# 基础配置
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-SEND_SAMPLE_RATE = 16000
-CHUNK_SIZE = 512
 
 host = "generativelanguage.googleapis.com"
 model = "gemini-2.0-flash-exp"
@@ -27,13 +19,9 @@ class VoiceChat:
         self.ws: WebSocketClientProtocol | Connection
         self.audio_out_queue = asyncio.Queue()
         self.running_step = 0
-        self.paused = False
         self.console = Console()
         # Use provided API key or fall back to environment variable
-        self.api_key = api_key if api_key else os.environ.get("GOOGLE_API_KEY")
-        if not self.api_key:
-            raise ValueError("API key is required. Please provide it or set GOOGLE_API_KEY environment variable.")
-        
+        self.api_key = api_key
 
     async def startup(self):
         """初始化对话"""
@@ -88,22 +76,18 @@ class VoiceChat:
         """监听音频输入"""
         mic_info = pya.get_default_input_device_info()
         stream = pya.open(
-            format=FORMAT,
-            channels=CHANNELS,
-            rate=SEND_SAMPLE_RATE,
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=16000,
             input=True,
             input_device_index=mic_info["index"],
-            frames_per_buffer=CHUNK_SIZE,
+            frames_per_buffer=512,
         )
 
         self.console.print("🎤 I'm listening, feel free to speak", style="yellow")
 
         while True:
-            if self.paused:
-                await asyncio.sleep(0.1)
-                continue
-
-            data = await asyncio.to_thread(stream.read, CHUNK_SIZE)
+            data = await asyncio.to_thread(stream.read, 512)
             if self.running_step > 1:
                 continue
 
@@ -124,10 +108,6 @@ class VoiceChat:
     async def send_audio(self):
         """发送音频数据"""
         while True:
-            if self.paused:
-                await asyncio.sleep(0.1)
-                continue
-
             chunk = await self.audio_out_queue.get()
             msg = {
                 "realtime_input": {
@@ -149,37 +129,26 @@ class VoiceChat:
                 self.running_step += 1
 
             response = json.loads(raw_response)
-            try:
-                if "serverContent" in response:
-                    parts = response["serverContent"].get("modelTurn", {}).get("parts", [])
-                    for part in parts:
-                        if "text" in part:
-                            current_response.append(part["text"])
-                            self.console.print("-", style="blue", end="")
-            except Exception:
-                pass
+            parts = response["serverContent"].get("modelTurn", {}).get("parts", [])
+            for part in parts:
+                current_response.append(part["text"])
+                self.console.print("-", style="blue", end="")            
 
             try:
                 turn_complete = response["serverContent"]["turnComplete"]
                 if turn_complete and current_response:
                     text = "".join(current_response)
                     
-                    # 检查是否是控制命令
-                    if "暂停对话" in text.lower():
-                        self.paused = True
-                        self.console.print("\n⏸ Conversation paused. Say 'Continue conversation' to resume", style="yellow")
-                    elif "继续对话" in text.lower() and self.paused:
-                        self.paused = False
-                        self.console.print("\n🎵 Conversation resumed", style="green")
                     
                     # 显示响应
                     self.console.print("\n=============================================", style="yellow")
                     self.console.print(Markdown(text))
 
                     current_response = []
-                    self.running_step = 0 if not self.paused else 2
+                    self.running_step = 0 
             except KeyError:
                 pass
+
 
     async def run(self):
         uri = f"wss://{host}/ws/google.ai.generativelanguage.v1alpha.GenerativeService.BidiGenerateContent?key={self.api_key}"
@@ -201,7 +170,7 @@ class VoiceChat:
                         return
                     if task.exception():
                         print(f"Error: {task.exception()}")
-                        sys.exit(1)
+                        exit(1)
 
                 for task in tg._tasks:
                     task.add_done_callback(check_error)

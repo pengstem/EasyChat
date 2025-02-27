@@ -44,3 +44,9 @@ x86/
 # Explicitly ignore Python cache files again
 __pycache__/
 *.pyc
+
+#temporalilyl ignore those files
+*.html
+*.js
+*.css
+*.json
