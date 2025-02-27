@@ -1,2 +1,43 @@
 __pycache__/
 *.pyc
+
+# Executables (no extension - Unix/Linux)
+*
+!*.*
+!*/
+
+# Executables (with extensions - Windows)
+*.exe
+*.out
+*.app
+
+# Object files
+*.o
+*.obj
+*.ko
+*.elf
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+
+# Build directories
+build/
+bin/
+Debug/
+Release/
+x64/
+x86/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
