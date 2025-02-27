@@ -1,5 +1,3 @@
-__pycache__/
-*.pyc
 
 # Executables (no extension - Unix/Linux)
 *
@@ -41,3 +39,8 @@ x86/
 .idea/
 *.swp
 *.swo
+
+
+# Explicitly ignore Python cache files again
+__pycache__/
+*.pyc
