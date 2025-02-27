@@ -9,6 +9,7 @@ A Python-based application for interacting with Google's Gemini AI models throug
 - 🤖 Multiple Gemini model options (gemini-2.0-flash, gemini-2.0-pro-exp, gemini-2.0-flash-thinking)
 - 🌐 English speaking practice with pronunciation feedback
 - 📝 Customizable system instructions
+- 🔐 Secure API key storage for convenience
 
 ## 📋 Requirements
 
@@ -29,6 +30,35 @@ cd EasyChat
 pip install google-generativeai websockets websockets-proxy rich elevenlabs pyaudio
 ```
 
+## 🔑 API Key Setup (HIGHLY RECOMMENDED)
+
+For security and convenience, it's strongly recommended to add your Google API key as an environment variable:
+
+### Windows
+
+```cmd
+setx GOOGLE_API_KEY "your-api-key-here"
+```
+
+*Note: You'll need to restart your command prompt or IDE after setting this.*
+
+### macOS/Linux
+
+```bash
+echo 'export GOOGLE_API_KEY="your-api-key-here"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+*For zsh users, use `~/.zshrc` instead.*
+
+This approach:
+
+- Keeps your API key secure (not exposed in code)
+- Makes the application work seamlessly across sessions
+- Prevents accidental sharing of your key in version control
+
+After setting the environment variable, the application will automatically detect and use it without prompting.
+
 ## 🚀 Usage
 
 Run the main script:
@@ -39,7 +69,7 @@ python gemini.py
 
 ### Text Communication Mode
 
-1. When prompted, enter your Google API key
+1. When prompted, enter your Google API key (or press 'y' if you've set it as an environment variable)
 2. Select option "2" for Text Communication
 3. Choose your preferred Gemini model
 4. Optionally provide a system instruction
@@ -47,7 +77,7 @@ python gemini.py
 
 ### Voice Communication Mode
 
-1. When prompted, enter your Google API key
+1. When prompted, enter your Google API key (or press 'y' if you've set it as an environment variable)
 2. Select option "1" for Voice Communication
 3. Use your microphone to practice English speaking
 4. Receive pronunciation feedback and corrections

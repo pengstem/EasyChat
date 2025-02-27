@@ -2,14 +2,25 @@ from google import genai
 from google.genai import types
 import talkwithgemini 
 import os
+from config_manager import load_api_key, save_api_key
 
 model_list=["gemini-2.0-flash","gemini-2.0-pro-exp-02-05","gemini-2.0-flash-thinking-exp"]
 output_length=[8192,8192,65536]
-api_key = input("Need a Google API key? Get one at https://aistudio.google.com/apikey 😊\n"
-                "If you've already added it to your environment variables, enter 'y'\n"
-                "Please enter your Google API key: ")
-if api_key.lower() == "y":
-	api_key = os.environ.get("GOOGLE_API_KEY")
+
+# First check for API key in environment variables or saved configuration
+api_key = os.environ.get("GOOGLE_API_KEY") or load_api_key()
+
+# Only prompt if we couldn't find a key
+if not api_key:
+    api_key = input("Need a Google API key? Get one at https://aistudio.google.com/apikey 😊\n"
+                    "Please enter your Google API key: ")
+    # Save the API key for future use
+    if api_key and api_key.strip():
+        save_api_key(api_key)
+        print("API key has been saved for future sessions ✅")
+else:
+    print("Using saved API key ✅")
+
 talking_model = input("Select a communication mode:\n1. Voice Chat\n2. Text Chat\n")
 client = genai.Client()
 

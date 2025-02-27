@@ -9,6 +9,7 @@ EasyChat 是一个基于 Python 的应用程序，可通过文本和语音界面
 - 🤖 多种 Gemini 模型选择（gemini-2.0-flash、gemini-2.0-pro-exp、gemini-2.0-flash-thinking）
 - 🌐 英语口语练习并获得发音反馈
 - 📝 可自定义系统指令
+- 🔐 安全的 API 密钥存储，方便使用
 
 ## 📋 系统要求
 
@@ -29,6 +30,35 @@ cd EasyChat
 pip install google-generativeai websockets websockets-proxy rich elevenlabs pyaudio
 ```
 
+## 🔑 API 密钥设置（强烈推荐）
+
+为了安全和便利，强烈建议将 Google API 密钥添加为环境变量：
+
+### Windows
+
+```cmd
+setx GOOGLE_API_KEY "你的-api-密钥"
+```
+
+*注意：设置后需要重启命令提示符或 IDE。*
+
+### macOS/Linux
+
+```bash
+echo 'export GOOGLE_API_KEY="你的-api-密钥"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+*对于 zsh 用户，请使用 `~/.zshrc` 代替。*
+
+这种方法的优势：
+
+- 保持 API 密钥安全（不在代码中暴露）
+- 使应用程序在会话之间无缝工作
+- 防止在版本控制中意外共享您的密钥
+
+设置环境变量后，应用程序将自动检测并使用它，无需再次输入。
+
 ## 🚀 使用方法
 
 运行主脚本：
@@ -39,7 +69,7 @@ python gemini.py
 
 ### 文本交流模式
 
-1. 在提示时输入您的 Google API 密钥
+1. 在提示时输入您的 Google API 密钥（如果已设置为环境变量，则按 'y'）
 2. 选择选项 "2" 进行文本交流
 3. 选择您偏好的 Gemini 模型
 4. 可选择提供系统指令
@@ -47,7 +77,7 @@ python gemini.py
 
 ### 语音交流模式
 
-1. 在提示时输入您的 Google API 密钥
+1. 在提示时输入您的 Google API 密钥（如果已设置为环境变量，则按 'y'）
 2. 选择选项 "1" 进行语音交流
 3. 使用麦克风练习英语口语
 4. 接收发音反馈和纠正

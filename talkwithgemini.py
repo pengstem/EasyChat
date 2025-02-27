@@ -9,9 +9,6 @@ from rich.console import Console
 from rich.markdown import Markdown
 from websockets.asyncio.client import connect
 from websockets.asyncio.connection import Connection
-import dotenv
-
-dotenv.load_dotenv()
 
 # 基础配置
 FORMAT = pyaudio.paInt16
@@ -56,11 +53,7 @@ class VoiceChat:
                 "turns": [
                     {
                         "role": "user",
-                        "parts": [
-                            {
-                                "text": "let's talk!",
-                            }
-                        ],
+                        "parts": [{"text": "let's talk!",}],
                     }
                 ],
                 "turn_complete": True,
