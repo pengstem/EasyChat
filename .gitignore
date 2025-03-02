@@ -46,7 +46,3 @@ __pycache__/
 *.pyc
 
 #temporalilyl ignore those files
-*.html
-*.js
-*.css
-*.json
