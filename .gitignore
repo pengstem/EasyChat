@@ -1,4 +1,3 @@
-
 # Executables (no extension - Unix/Linux)
 *
 !*.*
@@ -40,9 +39,44 @@ x86/
 *.swp
 *.swo
 
-
 # Explicitly ignore Python cache files again
 __pycache__/
 *.pyc
 
-#temporalilyl ignore those files
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Node/Vue
+node_modules/
+/dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env.local
+.env.*.local
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
