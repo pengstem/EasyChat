@@ -1,12 +1,18 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import router from './router'
 import './style.css'
-import App from './App.vue'
-import SecondApp from './components/SecondApp.vue'
+import EasyChatApp from './EasyChatApp.vue'
 
-// First application instance
-const app1 = createApp(App)
-app1.mount('#app')
+// Add Material Icons
+const link = document.createElement('link')
+link.rel = 'stylesheet'
+link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons'
+document.head.appendChild(link)
 
-// Second application instance
-const app2 = createApp(SecondApp)
-app2.mount('#app2')
+const app = createApp(EasyChatApp)
+const pinia = createPinia()
+
+app.use(pinia)
+app.use(router)
+app.mount('#app')
