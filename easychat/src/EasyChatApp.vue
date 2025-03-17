@@ -13,10 +13,13 @@ const currentChat = ref(null)
 const toggleSettings = () => {
   showSettings.value = !showSettings.value
 }
-
 const selectChat = (chat) => {
   currentChat.value = chat
 }
+const sendmessage = (message) => {
+  
+}
+
 const themeStore = useThemeStore()
 onMounted(() => {
   themeStore.applyTheme()
@@ -30,7 +33,7 @@ onMounted(() => {
       <Sidebar @select-chat="selectChat" />
       <div class="chat-container">
         <ChatWindow :current-chat="currentChat" />
-        <TypeZone :current-chat="currentChat" />
+        <TypeZone :current-chat="currentChat" @sendmessage="sendmessage"/>
       </div>
     </div>
     <Setting v-if="showSettings" @close="toggleSettings" />
