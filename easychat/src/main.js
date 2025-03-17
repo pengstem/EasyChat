@@ -16,9 +16,9 @@ app.use(pinia)
 app.use(router)
 
 // Initialize theme system
-import { useAppStore } from './stores/appStore'
+import { useThemeStore } from './stores/themeStore'
 app.mount('#app')
 
 // Initialize theme after app is mounted
-const appStore = useAppStore()
-appStore.initializeTheme()
+const themeStore = useThemeStore()
+themeStore.initializeTheme()

@@ -90,11 +90,10 @@ messages.value = mockMessages
 .message-content {
   padding: 0.75rem 1rem;
   border-radius: 1rem;
-  background-color: none;
 }
 
 .message.user .message-content {
-  background-color: var(--bg-message);
+  background-color: var(--text-background);
   color: white;
   border-radius: 1.5rem;
 }
@@ -102,11 +101,13 @@ messages.value = mockMessages
 .message-text {
   margin-bottom: 0.25rem;
   line-height: 1.4;
+  color: var(--text-primary);
 }
 
 .message-time {
   font-size: 0.75rem;
   opacity: 0.7;
+  color: var(--text-secondary);
 }
 
 .no-chat-selected {

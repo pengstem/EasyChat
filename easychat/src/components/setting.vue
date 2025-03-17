@@ -1,14 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useAppStore } from '../stores/appStore'
+import { ref, computed, onMounted } from 'vue'
+import { useThemeStore } from '../stores/themeStore'
 
 const emit = defineEmits(['close'])
-const appStore = useAppStore()
+const themeStore = useThemeStore()
 
 const settings = ref({
   theme: 'system',
   language: 'en',
-  notifications: true
 })
 
 const themes = [
@@ -22,22 +21,30 @@ const languages = [
   { value: 'cn', label: '简体中文' },
 ]
 
-// Load settings from store on mount
+const hasUnsavedChanges = computed(() => {
+  return themeStore.hasUnsavedChanges || 
+         settings.value.language !== themeStore.settings.language;
+})
+
 onMounted(() => {
-  if (appStore.settings) {
-    settings.value = { ...appStore.settings }
+  settings.value = { 
+    ...themeStore.settings,
+    theme: themeStore.currentTheme 
   }
 })
 
+const previewTheme = (theme) => {
+  themeStore.previewTheme(theme)
+}
+
 const saveSettings = () => {
-  // Save settings to pinia store
-  appStore.saveSettings({ ...settings.value })
+  themeStore.saveSettings({ ...settings.value })
   emit('close')
 }
 
-// Preview theme changes immediately without saving
-const previewTheme = (theme) => {
-  appStore.setTheme(theme)
+const cancelSettings = () => {
+  themeStore.cancelChanges()
+  emit('close')
 }
 </script>
 
@@ -46,7 +53,7 @@ const previewTheme = (theme) => {
     <div class="settings-modal">
       <div class="settings-header">
         <h2>Settings</h2>
-        <button class="close-button" @click="emit('close')">
+        <button class="close-button" @click="cancelSettings">
           <span class="material-icons">close</span>
         </button>
       </div>
@@ -72,19 +79,17 @@ const previewTheme = (theme) => {
             </option>
           </select>
         </div>
-
-        <div class="setting-group">
-          <h3>Notifications</h3>
-          <label class="toggle-switch">
-            <input type="checkbox" v-model="settings.notifications">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
       </div>
 
       <div class="settings-footer">
-        <button class="cancel-button" @click="emit('close')">Cancel</button>
-        <button class="save-button" @click="saveSettings">Save Changes</button>
+        <button class="cancel-button" @click="cancelSettings">Cancel</button>
+        <button 
+          class="save-button" 
+          @click="saveSettings"
+          :disabled="!hasUnsavedChanges"
+        >
+          Save Changes
+        </button>
       </div>
     </div>
   </div>
@@ -237,7 +242,12 @@ input:checked + .toggle-slider:before {
   color: white;
 }
 
-.save-button:hover {
+.save-button:hover:not(:disabled) {
   background-color: var(--primary-color-dark);
+}
+
+.save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>
