@@ -21,10 +21,6 @@ const languages = [
   { value: 'cn', label: '简体中文' },
 ]
 
-const hasUnsavedChanges = computed(() => {
-  return themeStore.hasUnsavedChanges || 
-         settings.value.language !== themeStore.settings.language;
-})
 
 onMounted(() => {
   settings.value = { 
@@ -86,7 +82,6 @@ const cancelSettings = () => {
         <button 
           class="save-button" 
           @click="saveSettings"
-          :disabled="!hasUnsavedChanges"
         >
           Save Changes
         </button>

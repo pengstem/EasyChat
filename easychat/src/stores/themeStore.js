@@ -35,7 +35,6 @@ export const useThemeStore = defineStore('theme', {
     
     applyTheme() {
       document.documentElement.classList.remove('light-theme', 'dark-theme')
-      
       const themeToApply = this.effectiveTheme
       document.documentElement.classList.add(`${themeToApply}-theme`)
     },
@@ -63,15 +62,5 @@ export const useThemeStore = defineStore('theme', {
       this.hasUnsavedChanges = false
     },
     
-
-    initializeTheme() {
-      this.applyTheme()
-      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      darkModeMediaQuery.addEventListener('change', () => {
-        if (this.currentTheme === 'system') {
-          this.applyTheme()
-        }
-      })
-    }
   }
 })

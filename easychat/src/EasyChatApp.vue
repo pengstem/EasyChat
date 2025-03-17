@@ -1,5 +1,6 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useThemeStore } from './stores/themeStore'
 import Header from './components/header.vue'
 import Sidebar from './components/sidebar.vue'
 import ChatWindow from './components/chatwindow.vue'
@@ -16,6 +17,10 @@ const toggleSettings = () => {
 const selectChat = (chat) => {
   currentChat.value = chat
 }
+const themeStore = useThemeStore()
+onMounted(() => {
+  themeStore.applyTheme()
+})
 </script>
 
 <template>
