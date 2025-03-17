@@ -57,8 +57,7 @@ const handleKeydown = (e) => {
 <style scoped>
 .type-zone {
   padding: 1rem;
-  background-color: var(--bg-primary);
-  border-top: 1px solid var(--border-color);
+  background-color: none;
 }
 
 .input-container {
@@ -69,17 +68,15 @@ const handleKeydown = (e) => {
 
 textarea {
   flex: 1;
-  min-height: 40px;
+  min-height: 50px;
   max-height: 200px;
-  padding: 0.75rem;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 25px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   resize: none;
   font-family: inherit;
   font-size: 1rem;
-  line-height: 1.5;
 }
 
 textarea:focus {
@@ -97,9 +94,15 @@ textarea:disabled {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  border-radius: 8px;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s;
+}
+textarea::placeholder{
+  padding-left: 1rem;
+  padding-top: 0.75rem;
 }
 
 .send-button:hover:not(:disabled) {

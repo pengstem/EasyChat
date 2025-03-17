@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useAppStore } from '../stores/appStore'
 
 const emit = defineEmits(['close'])
+const appStore = useAppStore()
 
 const settings = ref({
-  theme: 'dark',
-  fontSize: 'medium',
+  theme: 'system',
   language: 'en',
   notifications: true
 })
@@ -21,10 +22,22 @@ const languages = [
   { value: 'cn', label: '简体中文' },
 ]
 
+// Load settings from store on mount
+onMounted(() => {
+  if (appStore.settings) {
+    settings.value = { ...appStore.settings }
+  }
+})
+
 const saveSettings = () => {
-  // Here you would typically save settings to localStorage or backend
-  localStorage.setItem('easychat-settings', JSON.stringify(settings.value))
+  // Save settings to pinia store
+  appStore.saveSettings({ ...settings.value })
   emit('close')
+}
+
+// Preview theme changes immediately without saving
+const previewTheme = (theme) => {
+  appStore.setTheme(theme)
 }
 </script>
 
@@ -41,7 +54,10 @@ const saveSettings = () => {
       <div class="settings-content">
         <div class="setting-group">
           <h3>Theme</h3>
-          <select v-model="settings.theme">
+          <select 
+            v-model="settings.theme"
+            @change="previewTheme(settings.theme)"
+          >
             <option v-for="theme in themes" :key="theme.value" :value="theme.value">
               {{ theme.label }}
             </option>

@@ -34,23 +34,22 @@ const selectChat = (chat) => {
 
 <style scoped>
 .app-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 1fr 20fr;
   height: 100vh;
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
 
 .main-content {
-  display: flex;
-  flex: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
   overflow: hidden;
 }
 
 .chat-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  display: grid;
+  grid-template-rows: 1fr auto;
   overflow: hidden;
   background-color: var(--bg-secondary);
 }

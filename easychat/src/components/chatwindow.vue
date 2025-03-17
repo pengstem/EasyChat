@@ -60,19 +60,15 @@ messages.value = mockMessages
       </div>
     </div>
     <div v-else class="no-chat-selected">
-      <span class="material-icons">chat</span>
       <p>Select a chat or start a new conversation</p>
     </div>
   </div>
 </template>
-
 <style scoped>
 .chat-window {
   flex: 1;
   overflow-y: auto;
   padding: 1rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .chat-messages {
@@ -94,12 +90,13 @@ messages.value = mockMessages
 .message-content {
   padding: 0.75rem 1rem;
   border-radius: 1rem;
-  background-color: var(--bg-message);
+  background-color: none;
 }
 
 .message.user .message-content {
-  background-color: var(--primary-color);
+  background-color: var(--bg-message);
   color: white;
+  border-radius: 1.5rem;
 }
 
 .message-text {

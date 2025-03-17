@@ -4,7 +4,6 @@ import router from './router'
 import './style.css'
 import EasyChatApp from './EasyChatApp.vue'
 
-// Add Material Icons
 const link = document.createElement('link')
 link.rel = 'stylesheet'
 link.href = 'https://fonts.googleapis.com/icon?family=Material+Icons'
@@ -15,4 +14,11 @@ const pinia = createPinia()
 
 app.use(pinia)
 app.use(router)
+
+// Initialize theme system
+import { useAppStore } from './stores/appStore'
 app.mount('#app')
+
+// Initialize theme after app is mounted
+const appStore = useAppStore()
+appStore.initializeTheme()

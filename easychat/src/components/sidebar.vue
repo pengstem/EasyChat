@@ -4,9 +4,9 @@ import { ref } from 'vue'
 const emit = defineEmits(['select-chat'])
 
 const chats = ref([
-  { id: 1, title: 'General Chat', lastMessage: 'Hello!' },
-  { id: 2, title: 'Code Assistant', lastMessage: 'How can I help you?' },
-  { id: 3, title: 'Writing Helper', lastMessage: 'Let\'s improve your writing.' }
+  { id: 3, title: 'General Chat'},
+  { id: 2, title: 'Code Assistant'},
+  { id: 1, title: 'Writing Helper'}
 ])
 
 const selectedChat = ref(null)
@@ -20,9 +20,8 @@ const createNewChat = () => {
   const newChat = {
     id: chats.value.length + 1,
     title: 'New Chat',
-    lastMessage: 'Start a new conversation'
   }
-  chats.value.push(newChat)
+  chats.value.unshift(newChat)
   selectChat(newChat)
 }
 </script>
@@ -41,83 +40,82 @@ const createNewChat = () => {
         :class="{ active: selectedChat?.id === chat.id }"
         @click="selectChat(chat)"
       >
-        <span class="material-icons">chat</span>
         <div class="chat-info">
           <h3>{{ chat.title }}</h3>
-          <p>{{ chat.lastMessage }}</p>
         </div>
       </div>
     </div>
   </aside>
 </template>
-
 <style scoped>
 .sidebar {
-  width: 300px;
-  background-color: var(--bg-primary);
-  border-right: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
+    width: 240px;
+    background-color: var(--bg-primary);
+    border-right: 1px solid var(--border-color);
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow-y: auto;
 }
 
 .new-chat-btn {
-  margin: 1rem;
-  padding: 0.75rem;
-  background-color: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 45px;
+    gap: 0.5rem;
+    align-items: center;
+    transition: background-color 0.2s;
+    font-size: x-large;
+    font-family: monospace;
 }
 
 .new-chat-btn:hover {
-  background-color: var(--primary-color-dark);
+    background-color: var(--primary-color-dark);
 }
 
 .chat-list {
-  flex: 1;
-  overflow-y: auto;
+    overflow-y: auto;
+    display: grid;
+    grid-template-rows: repeat(auto-fill, minmax(50px, 50px));
+    gap: 1px;
 }
 
 .chat-item {
-  padding: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s;
+    display: grid;
+    height: 50px;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 8px;
+    margin:2px 8px;
+    padding: 0 1rem;
+
 }
 
 .chat-item:hover {
-  background-color: var(--bg-hover);
+    background-color: var(--bg-hover);
 }
 
 .chat-item.active {
-  background-color: var(--bg-active);
+    background-color: var(--bg-active);
 }
 
 .chat-info {
-  flex: 1;
-  overflow: hidden;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto auto;
 }
 
 .chat-info h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--text-primary);
+    margin: 10px 0px;
+    font-size: 1rem;
+    color: var(--text-primary);
 }
 
-.chat-info p {
-  margin: 0;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 </style>
