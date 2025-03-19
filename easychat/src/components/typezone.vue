@@ -14,7 +14,7 @@ const message = ref('')
 const isTyping = ref(false)
 
 const sendMessage = () => {
-  if (!message.value.trim() || !props.currentChat) return
+  if (!props.currentChat) return
 
   emit('send-message', {
     content: message.value,
@@ -56,22 +56,21 @@ const handleKeydown = (e) => {
 <style scoped>
 .type-zone {
   padding: 1rem;
-  background-color: none;
+  background-color: transparent;
 }
 
 .input-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   gap: 0.5rem;
-  align-items: flex-end;
 }
 
 textarea {
-  flex: 1;
   min-height: 50px;
   max-height: 200px;
   border: 1px solid var(--border-color);
   border-radius: 50q;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-typezone);
   color: var(--text-primary);
   resize: none;
   font-family: inherit;
@@ -93,8 +92,8 @@ textarea:focus {
   background-color: var(--primary-color);
   color: white;
   border: none;
-  height: 57.33px;
-  width: 57.33px;
+  height: 57px;
+  width: 57px;
   border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.2s;

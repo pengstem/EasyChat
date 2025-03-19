@@ -17,7 +17,6 @@ defineEmits(['toggle-settings'])
 .app-header {
     background-color: var(--bg-primary);
     border-bottom: 1px solid var(--border-color);
-    padding: 1rem;
     padding: 2px 1rem;
 }
 
